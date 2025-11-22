@@ -132,11 +132,11 @@ public class PlaneManager : MonoBehaviour
         PlaneLine line = lineQueue.Dequeue();
 
 
-        if (totalLines > 0 && totalLines % 50 == 0)      // 50 칸마다
+        if (totalLines > 0 && totalLines % 100 == 0)      // 100 칸마다 회복
         {
             line.healPack.SetActive(true);
         }
-        else if (lastObstacleLine + tryLineCount <= totalLines)     // 힐펙이 안 생긴 경우
+        else if (lastObstacleLine + tryLineCount <= totalLines)     // 힐펙이 없는 경우만
         {
             if(Random.value < generateRate)
             {

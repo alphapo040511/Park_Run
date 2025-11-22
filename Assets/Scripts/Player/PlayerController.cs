@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
 
         PlayManager.instance.HpUpdate(currentHp / maxHp);
 
-        if (Vector3.Distance(transform.position, Vector3.zero) > 10f || currentHp <= 0)
+        if (Vector3.Distance(transform.position, Vector3.zero) > 15f || currentHp <= 0)
         {
             Debug.Log("사망");
             PlayManager.instance.Die();
@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour
         PlayManager.instance.HpUpdate(currentHp / maxHp);
     }
 
-    bool IsGrounded()
+    public bool IsGrounded()
     {
         Collider[] col = Physics.OverlapSphere(transform.position, checkRadius, groundLayer);
 
