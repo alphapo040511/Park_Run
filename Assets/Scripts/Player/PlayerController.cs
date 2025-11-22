@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
     public float checkRadius = 0.2f;
     public LayerMask groundLayer;
 
+    [Header("HP Settings")]
+    public float maxHp = 100f;
+    private float currentHp = 100f;
+
     public float rotateSpeed = 5f;
 
     private float currentSpeed = 0;
@@ -29,6 +33,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        currentHp = maxHp;
         rb = GetComponent<Rigidbody>();
         currentAngle = transform.localEulerAngles.z;
         targetAngle = currentAngle;
@@ -37,13 +42,28 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        if (PlayManager.instance.isPlaying == false) return;
+
+        if((Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+                || (Input.GetKeyDown(KeyCode.W) && IsGrounded()))
         {
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
 
         Movement();
         Rotate();
+
+        currentHp -= Time.deltaTime;
+        currentHp = Mathf.Clamp(currentHp, 0, maxHp);
+
+        PlayManager.instance.HpUpdate(currentHp / maxHp);
+
+        if (Vector3.Distance(transform.position, Vector3.zero) > 10f || currentHp <= 0)
+        {
+            Debug.Log("사망");
+            PlayManager.instance.Die();
+            rb.velocity = Vector3.zero;
+        }
     }
 
     void Movement()
@@ -88,6 +108,17 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float amount)
     {
         Debug.Log($"체력 감소! {amount}");
+        currentHp -= amount;
+        currentHp = Mathf.Clamp(currentHp, 0, maxHp);
+        PlayManager.instance.HpUpdate(currentHp / maxHp);
+    }
+
+    public void TakeHeal(float amount)
+    {
+        Debug.Log($"체력 회복! {amount}");
+        currentHp += amount;
+        currentHp = Mathf.Clamp(currentHp, 0, maxHp);
+        PlayManager.instance.HpUpdate(currentHp / maxHp);
     }
 
     bool IsGrounded()
@@ -113,6 +144,7 @@ public class PlayerController : MonoBehaviour
         {
             other.transform.GetComponent<PlaneBase>().OnTileEnter(this);
             targetAngle = other.transform.parent.localEulerAngles.z;
+            other.transform.parent.gameObject.SetActive(false);
         }
     }
 }

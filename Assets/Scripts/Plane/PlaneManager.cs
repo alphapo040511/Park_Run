@@ -8,8 +8,7 @@ public class PlaneManager : MonoBehaviour
 
     private void Awake()
     {
-        if(instance == null)
-            instance = this;
+        instance = this;
     }
 
     [Header("Plane Settings")]
@@ -33,9 +32,11 @@ public class PlaneManager : MonoBehaviour
     private Queue<PlaneLine> lineQueue = new Queue<PlaneLine>();
     private List<PlaneLine> activeLines = new List<PlaneLine>();
 
-    private bool isPlaying = false;     // 임시로 내부에 설정
-
     public int totalLines { get; private set; } = 0;
+
+    private bool initialized = false;
+
+    private int score = 0;
 
     void Start()
     {
@@ -45,15 +46,20 @@ public class PlaneManager : MonoBehaviour
 
     private void Update()
     {
-        if (isPlaying == false) return;
+        if (PlayManager.instance.isPlaying == false)
+        {
+            if(Input.anyKeyDown && initialized)
+            {
+                PlayManager.instance.isPlaying = true;
+            }
+            return;
+        }
         MoveLines();
         ReplacePlane();
     }
 
     void MoveLines()
     {
-        float width = PlaneLine.GetWidth(planeCount, lineRadius);
-
         List<PlaneLine> lineCopy = new List<PlaneLine>(activeLines.ToArray());
 
         foreach (var line in lineCopy)
@@ -64,6 +70,8 @@ public class PlaneManager : MonoBehaviour
             {
                 activeLines.Remove(line);
                 LineEnqueue(line);
+                score++;
+                PlayManager.instance.ScoreUpdate(score);
             }
         }
     }
@@ -114,7 +122,7 @@ public class PlaneManager : MonoBehaviour
             activeLines.Add(line);
         }
 
-        isPlaying = true;
+        initialized = true;
     }
 
     public PlaneLine LineDequeue(Vector3 position)
@@ -123,7 +131,12 @@ public class PlaneManager : MonoBehaviour
 
         PlaneLine line = lineQueue.Dequeue();
 
-        if (lastObstacleLine + tryLineCount <= totalLines)
+
+        if (totalLines > 0 && totalLines % 50 == 0)      // 50 칸마다
+        {
+            line.healPack.SetActive(true);
+        }
+        else if (lastObstacleLine + tryLineCount <= totalLines)     // 힐펙이 안 생긴 경우
         {
             if(Random.value < generateRate)
             {
@@ -132,6 +145,8 @@ public class PlaneManager : MonoBehaviour
             }
         }
 
+
+
         line.Show(position, totalLines++);
 
         return line;
@@ -139,13 +154,13 @@ public class PlaneManager : MonoBehaviour
 
     public void LineEnqueue(PlaneLine line)
     {
-        line.gameObject.SetActive(false);
+        line.Hide();
         line.ResetLine();
         lineQueue.Enqueue(line);
     }
 
     public int GetRound()
     {
-        return (int)Mathf.Repeat((totalLines / 100), 3);
+        return (int)Mathf.Repeat(totalLines / 50, 3);
     }
 }

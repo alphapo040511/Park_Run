@@ -10,6 +10,7 @@ public class PlaneLine : MonoBehaviour
 
     public GameObject RotateObstacle;
     public GameObject YoyoObstacle;
+    public GameObject healPack;
 
     public void InitializeLine(int planeCount, int radius)
     {
@@ -74,6 +75,7 @@ public class PlaneLine : MonoBehaviour
         gameObject.SetActive(false);
         RotateObstacle.SetActive(false);
         YoyoObstacle.SetActive(false);
+        healPack.SetActive(false);
     }
 
     public void Show(Vector3 position, int index)
