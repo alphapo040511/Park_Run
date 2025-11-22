@@ -5,7 +5,7 @@ using UnityEngine;
 public class FallingPlane : PlaneBase
 {
     public float fallingDuration = 3f;
-    public float fallSpeed = 9.8f;
+    public float fallAcceleration = 9.81f;
     private bool isStepped = false;
 
     Coroutine fallingRoutine;
@@ -47,13 +47,16 @@ public class FallingPlane : PlaneBase
     IEnumerator Falling()
     {
         Vector3 dir = -transform.up;
+        float vel = 0;
+
 
         float t = 0;
         while(t < fallingDuration)
         {
             t += Time.deltaTime;
+            vel += fallAcceleration * Time.deltaTime;
 
-            transform.position += fallSpeed * dir * Time.deltaTime; ;
+            transform.position += vel * dir * Time.deltaTime;
 
             yield return null;
         }

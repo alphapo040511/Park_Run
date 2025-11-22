@@ -45,7 +45,7 @@ public class PlaneManager : MonoBehaviour
         {
             line.transform.position -= transform.forward * moveSpeed * Time.deltaTime;
 
-            if(line.transform.position.z <= -width * 2)
+            if(line.transform.position.z <= -hidePoint)
             {
                 activeLines.Remove(line);
                 LineEnqueue(line);

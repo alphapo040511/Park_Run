@@ -13,9 +13,15 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 7f;
     public float gravity = 9.81f;
 
+    [Header("Ground Check Settings")]
+    public float checkRadius = 0.2f;
+    public LayerMask groundLayer;
+
+    public float rotateSpeed = 5f;
 
     private float currentSpeed = 0;
-    bool canJump = true;
+    private float targetAngle = 0;
+    private float currentAngle = 0;
 
     // component
     private Rigidbody rb;
@@ -24,18 +30,20 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        currentAngle = transform.localEulerAngles.z;
+        targetAngle = currentAngle;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && canJump)
+        if(Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            //canJump = false;
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
 
         Movement();
+        Rotate();
     }
 
     void Movement()
@@ -57,9 +65,24 @@ public class PlayerController : MonoBehaviour
 
         currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed, maxSpeed);
 
-        float y = rb.velocity.y;
+        float y = Vector3.Dot(rb.velocity, transform.up);
         y -= gravity * Time.deltaTime;
         rb.velocity = transform.right * currentSpeed + transform.up * y;
+    }
+
+    void Rotate()
+    {
+        float delta = Mathf.DeltaAngle(currentAngle, targetAngle);
+        if (Mathf.Abs(currentAngle - targetAngle) > 0.01f)
+        {
+            currentAngle += delta * Time.deltaTime * rotateSpeed;
+        }
+        else
+        {
+            currentAngle = targetAngle;
+        }
+
+        transform.localRotation = Quaternion.Euler(new Vector3(0, 0, currentAngle));
     }
 
     public void TakeDamage(float amount)
@@ -67,20 +90,19 @@ public class PlayerController : MonoBehaviour
         Debug.Log($"체력 감소! {amount}");
     }
 
+    bool IsGrounded()
+    {
+        Collider[] col = Physics.OverlapSphere(transform.position, checkRadius, groundLayer);
+
+        return col.Length > 0;      // 하나라도 걸리면 바닥이다.
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.transform.CompareTag("Plane"))
         {
-            canJump = true;
             collision.transform.GetComponent<PlaneBase>().OnTileEnter(this);
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.transform.CompareTag("Plane"))
-        {
-            //canJump = false;
+            targetAngle = collision.transform.parent.localEulerAngles.z;
         }
     }
 }

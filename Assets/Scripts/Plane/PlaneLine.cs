@@ -40,8 +40,26 @@ public class PlaneLine : MonoBehaviour
     {
         foreach (var plane in planes)
         {
-            int ran = Random.Range(0, 4);
-            plane.SetPlane((PlaneType)ran);
+            //int ran = Random.Range(0, 4);
+            //plane.SetPlane((PlaneType)ran);
+
+            float value = Random.value;
+            if(value < 0.65f)
+            {
+                plane.SetPlane(PlaneType.Default);
+            }
+            else if(value < 0.8f)
+            {
+                plane.SetPlane(PlaneType.Falling);
+            }
+            else if(value < 0.9f)
+            {
+                plane.SetPlane(PlaneType.Spike);
+            }
+            else
+            {
+                plane.SetPlane(PlaneType.None);
+            }
         }
     }
 
