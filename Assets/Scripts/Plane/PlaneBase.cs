@@ -10,11 +10,11 @@ public abstract class PlaneBase: MonoBehaviour
     public void Show()
     {
         gameObject.SetActive(true);
+        OnTileInitialize();
     }
 
     public void Hide()
     {
-        OnTileInitialize();
         gameObject.SetActive(false);
     }
 }

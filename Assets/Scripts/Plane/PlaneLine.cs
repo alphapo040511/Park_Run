@@ -6,6 +6,10 @@ public class PlaneLine : MonoBehaviour
 {
     public PlaneModule planeReference;
     private List<PlaneModule> planes = new List<PlaneModule>();
+    private int index = 0;
+
+    public GameObject RotateObstacle;
+    public GameObject YoyoObstacle;
 
     public void InitializeLine(int planeCount, int radius)
     {
@@ -28,6 +32,14 @@ public class PlaneLine : MonoBehaviour
         }
     }
 
+    public void ActiveObstacle()
+    {
+        if (Random.value < 0.5f)
+            RotateObstacle.SetActive(true);
+        else
+            YoyoObstacle.SetActive(true);
+    }
+
     public void ResetLine()
     {
         foreach(var plane in planes)
@@ -38,39 +50,36 @@ public class PlaneLine : MonoBehaviour
 
     public void RandomPlane()
     {
+        int count = 0;
         foreach (var plane in planes)
         {
-            //int ran = Random.Range(0, 4);
-            //plane.SetPlane((PlaneType)ran);
+            float x = index * 0.2f;                 // 길이 방향 스케일
+            float y = (float)count++ / planes.Count; // 둘레 방향 0~1, 자동으로 이어짐
 
-            float value = Random.value;
-            if(value < 0.65f)
-            {
+            float value = Mathf.PerlinNoise(x, y);
+
+            if (value < 0.5f)
                 plane.SetPlane(PlaneType.Default);
-            }
-            else if(value < 0.8f)
-            {
-                plane.SetPlane(PlaneType.Falling);
-            }
-            else if(value < 0.9f)
-            {
-                plane.SetPlane(PlaneType.Spike);
-            }
-            else
-            {
+            else if (value < 0.7f)
                 plane.SetPlane(PlaneType.None);
-            }
+            else if (value < 0.85f)
+                plane.SetPlane(PlaneType.Falling);
+            else
+                plane.SetPlane(PlaneType.Spike);
         }
     }
 
     public void Hide()
     {
         gameObject.SetActive(false);
+        RotateObstacle.SetActive(false);
+        YoyoObstacle.SetActive(false);
     }
 
-    public void Show(Vector3 position)
+    public void Show(Vector3 position, int index)
     {
         transform.position = position;
+        this.index = index;
         gameObject.SetActive(true);
     }
 

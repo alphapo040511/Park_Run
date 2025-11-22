@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class FallingPlane : PlaneBase
 {
+    public GameObject icon_1;
+    public GameObject icon_2;
+    public GameObject icon_3;
+
     public float fallingDuration = 3f;
     public float fallAcceleration = 9.81f;
     private bool isStepped = false;
@@ -15,6 +19,11 @@ public class FallingPlane : PlaneBase
     private void Awake()
     {
         startPosition = transform.localPosition;
+    }
+
+    private void OnEnable()
+    {
+        IconSetting();
     }
 
     public override void OnTileEnter(PlayerController player)
@@ -41,6 +50,14 @@ public class FallingPlane : PlaneBase
         }
 
         transform.localPosition = startPosition;
+    }
+
+    void IconSetting()
+    {
+        int round = PlaneManager.instance.GetRound();
+        icon_1.SetActive(round == 0);
+        icon_2.SetActive(round == 1);
+        icon_3.SetActive(round == 2);
     }
 
 

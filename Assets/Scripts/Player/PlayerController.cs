@@ -105,4 +105,14 @@ public class PlayerController : MonoBehaviour
             targetAngle = collision.transform.parent.localEulerAngles.z;
         }
     }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.CompareTag("Obstacle"))
+        {
+            other.transform.GetComponent<PlaneBase>().OnTileEnter(this);
+            targetAngle = other.transform.parent.localEulerAngles.z;
+        }
+    }
 }

@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class PlaneManager : MonoBehaviour
 {
+    public static PlaneManager instance;
+
+    private void Awake()
+    {
+        if(instance == null)
+            instance = this;
+    }
+
     [Header("Plane Settings")]
     [Range(4, 16)]public int planeCount = 12;         // 한 라인당 발판 개수 (4 ~ 16 까지 범위 제한)
 
@@ -17,10 +25,17 @@ public class PlaneManager : MonoBehaviour
     public float moveSpeed = 3f;
     public float hidePoint = 10;
 
+    [Header("Obstacle Settings")]
+    public int tryLineCount = 15;
+    public float generateRate = 0.3f;
+    private int lastObstacleLine = 0;
+
     private Queue<PlaneLine> lineQueue = new Queue<PlaneLine>();
     private List<PlaneLine> activeLines = new List<PlaneLine>();
 
     private bool isPlaying = false;     // 임시로 내부에 설정
+
+    public int totalLines { get; private set; } = 0;
 
     void Start()
     {
@@ -107,7 +122,18 @@ public class PlaneManager : MonoBehaviour
         if (lineQueue.Count == 0) return null;
 
         PlaneLine line = lineQueue.Dequeue();
-        line.Show(position);
+
+        if (lastObstacleLine + tryLineCount <= totalLines)
+        {
+            if(Random.value < generateRate)
+            {
+                lastObstacleLine = totalLines;
+                line.ActiveObstacle();
+            }
+        }
+
+        line.Show(position, totalLines++);
+
         return line;
     }
 
@@ -116,5 +142,10 @@ public class PlaneManager : MonoBehaviour
         line.gameObject.SetActive(false);
         line.ResetLine();
         lineQueue.Enqueue(line);
+    }
+
+    public int GetRound()
+    {
+        return (int)Mathf.Repeat((totalLines / 100), 3);
     }
 }
