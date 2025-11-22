@@ -159,6 +159,8 @@ MonoBehaviour:
     type: 3}
   moveSpeed: 10
   hidePoint: 15
+  tryLineCount: 15
+  generateRate: 0.3
 --- !u!4 &81860913
 Transform:
   m_ObjectHideFlags: 0
