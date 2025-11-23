@@ -8,6 +8,9 @@ using UnityEngine.SceneManagement;
 public class PlayManager : MonoBehaviour
 {
     public static PlayManager instance;
+
+    public static int randomSeed = 0;
+
     public void Awake()
     {
         if (instance == null)
@@ -34,6 +37,7 @@ public class PlayManager : MonoBehaviour
     private void Start()
     {
         BestScoreUpdate(bestScore);
+        randomSeed = Random.Range(0, int.MaxValue);
     }
 
     private void Update()
@@ -42,6 +46,7 @@ public class PlayManager : MonoBehaviour
         {
             SceneManager.LoadScene("GameScene");
             isDie = false;
+            randomSeed = Random.Range(0, 10000);
         }
     }
 
