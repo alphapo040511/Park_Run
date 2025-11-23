@@ -95,7 +95,91 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: "\uB300\uC9C0 1_0"
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 913
+        width: 939
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0650a1d6354e475db38bd32833a35cf
+      internalID: -1173316959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uB300\uC9C0 1_1"
+      rect:
+        serializedVersion: 2
+        x: 1125
+        y: 720
+        width: 718
+        height: 267
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48dd52908922a4e108183a10f1987095
+      internalID: 255475859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uB300\uC9C0 1_2"
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 721
+        width: 921
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa9a49eda2f1348febe37b99b5c6ca6c
+      internalID: -1326658555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uB300\uC9C0 1_3"
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 425
+        width: 113
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2cab999336584c588d824855635d35c
+      internalID: -1050856553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +190,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      "\uB300\uC9C0 1_0": -1173316959
+      "\uB300\uC9C0 1_1": 255475859
+      "\uB300\uC9C0 1_2": -1326658555
+      "\uB300\uC9C0 1_3": -1050856553
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

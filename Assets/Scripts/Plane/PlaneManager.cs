@@ -50,7 +50,7 @@ public class PlaneManager : MonoBehaviour
         {
             if(Input.anyKeyDown && initialized)
             {
-                PlayManager.instance.isPlaying = true;
+                PlayManager.instance.GameStart();
             }
             return;
         }

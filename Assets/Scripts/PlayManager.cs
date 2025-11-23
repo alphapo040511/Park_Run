@@ -29,13 +29,21 @@ public class PlayManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI bestScoreText;
 
+    public TextMeshProUGUI gameOverScore;
+
     public Image hp;
+
+    public GameObject startUI;
+    public GameObject overUI;
+
     private int bestScore = 0;
+    private int lastScore = 0;
 
     private bool isDie = false;
 
     private void Start()
     {
+        bestScore = PlayerPrefs.GetInt("bestScore");
         BestScoreUpdate(bestScore);
         randomSeed = Random.Range(0, int.MaxValue);
     }
@@ -44,10 +52,31 @@ public class PlayManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space) && isDie)
         {
-            SceneManager.LoadScene("GameScene");
-            isDie = false;
-            randomSeed = Random.Range(0, 10000);
+            //Restart();
         }
+    }
+
+    public void GameStart()
+    {
+        isPlaying = true;
+        startUI.SetActive(false);
+    }
+
+    public void Restart()
+    {
+        if (isDie == false) return;
+        
+        randomSeed = Random.Range(0, 10000);
+        SceneManager.LoadScene("GameScene");
+        isDie = false;
+
+        startUI.SetActive(true);
+        overUI.SetActive(false);
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 
     void BestScoreUpdate(int meter)
@@ -57,10 +86,12 @@ public class PlayManager : MonoBehaviour
 
     public void ScoreUpdate(int meter)
     {
+        lastScore = meter;
         if (bestScore < meter)
         {
             bestScore = meter;
             BestScoreUpdate(bestScore);
+            PlayerPrefs.SetInt("bestScore", bestScore);
         }
 
         scoreText.text = $"{meter:N0}M";
@@ -76,5 +107,7 @@ public class PlayManager : MonoBehaviour
     {
         isDie = true;
         isPlaying = false;
+        gameOverScore.text = $"{lastScore:N0}M";
+        overUI.SetActive(true);
     }
 }
