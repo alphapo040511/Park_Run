@@ -55,7 +55,7 @@ public class PlaneLine : MonoBehaviour
         foreach (var plane in planes)
         {
             float x = index * 0.2f;                 // 길이 방향 스케일
-            float y = (float)count++ / planes.Count; // 둘레 방향 0~1, 자동으로 이어짐
+            float y = 2 * (float)count++ / planes.Count; // 둘레 방향 0~1, 자동으로 이어짐
 
             float value = Mathf.PerlinNoise(x, y);
 
