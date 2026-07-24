@@ -13,15 +13,16 @@ public class PlayManager : MonoBehaviour
 
     public void Awake()
     {
-        if (instance == null)
-        {
-            DontDestroyOnLoad(gameObject);
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        instance = this;
+        //if (instance == null)
+        //{
+        //    DontDestroyOnLoad(gameObject);
+        //    instance = this;
+        //}
+        //else
+        //{
+        //    Destroy(gameObject);
+        //}
     }
 
     public bool isPlaying = false;

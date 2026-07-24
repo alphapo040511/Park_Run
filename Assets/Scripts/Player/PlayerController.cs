@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public float gravity = 9.81f;
 
     [Header("Ground Check Settings")]
+    public Transform centerPos;
     public float checkRadius = 0.2f;
     public LayerMask groundLayer;
 
@@ -62,7 +63,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("사망");
             PlayManager.instance.Die();
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
         }
     }
 
@@ -85,9 +86,9 @@ public class PlayerController : MonoBehaviour
 
         currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed, maxSpeed);
 
-        float y = Vector3.Dot(rb.velocity, transform.up);
+        float y = Vector3.Dot(rb.linearVelocity, transform.up);
         y -= gravity * Time.deltaTime;
-        rb.velocity = transform.right * currentSpeed + transform.up * y;
+        rb.linearVelocity = transform.right * currentSpeed + transform.up * y;
     }
 
     void Rotate()
@@ -123,7 +124,19 @@ public class PlayerController : MonoBehaviour
 
     public bool IsGrounded()
     {
-        Collider[] col = Physics.OverlapSphere(transform.position, checkRadius, groundLayer);
+        if (centerPos == null) return false;
+
+        Collider[] col = Physics.OverlapSphere(centerPos.position, checkRadius, groundLayer);
+
+        foreach(var c in col)
+        {
+            if (c.transform.CompareTag("Plane"))
+            {
+                c.transform.GetComponent<PlaneBase>().OnTileEnter(this);
+                targetAngle = c.transform.parent.localEulerAngles.z;
+                break;
+            }
+        }
 
         return col.Length > 0;      // 하나라도 걸리면 바닥이다.
     }
@@ -146,5 +159,11 @@ public class PlayerController : MonoBehaviour
             targetAngle = other.transform.parent.localEulerAngles.z;
             other.transform.parent.gameObject.SetActive(false);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        if(centerPos) Gizmos.DrawWireSphere(centerPos.position, checkRadius);
     }
 }

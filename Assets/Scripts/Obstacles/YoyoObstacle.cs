@@ -10,6 +10,11 @@ public class YoyoObstacle : MonoBehaviour
 
     private float t = 0;
 
+    private void Start()
+    {
+        t = range;
+    }
+
     // Update is called once per frame
     void Update()
     {
